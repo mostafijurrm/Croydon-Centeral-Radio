@@ -4,10 +4,12 @@ import 'dart:io';
 import 'package:app_review/app_review.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:croydoncentralradio/Splash.dart';
+import 'package:croydoncentralradio/class/url_launcher.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:phone_state_i/phone_state_i.dart';
@@ -861,18 +863,22 @@ class _MyHomePageState extends State<MyHomePage>
                   onTap: () {
                     Navigator.pop(context);
                     tabController.animateTo(0);
-                  }),
+                  }),*/
+              SizedBox(height: 50,),
               ListTile(
-                  leading: Icon(Icons.category, color: Colors.white),
+                  leading: Icon(
+                      FontAwesomeIcons.facebook,
+                      color: Colors.white
+                  ),
                   title: Text(
-                    'Category',
+                    'Facebook',
                     style: TextStyle(color: Colors.white),
                   ),
                   onTap: () {
                     Navigator.pop(context);
-                    tabController.animateTo(1);
+                    UrlLauncher.url(Strings.facebookUrl);
                   }),
-              ListTile(
+              /*ListTile(
                   leading: Icon(Icons.radio, color: Colors.white),
                   title: Text(
                     'All Radio',
@@ -905,7 +911,6 @@ class _MyHomePageState extends State<MyHomePage>
                           ),
                         ));
                   }),*/
-              SizedBox(height: 50,),
               ListTile(
                   leading: Icon(Icons.share, color: Colors.white),
                   title: Text(

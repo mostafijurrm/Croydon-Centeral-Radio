@@ -139,7 +139,7 @@ class _Home_State extends State<Home> {
                                         decoration: BoxDecoration(
                                           image: DecorationImage(
                                               fit: BoxFit.cover,
-                                              image: NetworkImage(
+                                              image: AssetImage(
                                                   '${projectSnap.data[i].image}')),
                                           borderRadius:
                                               BorderRadius.circular(5.0),
@@ -278,7 +278,7 @@ class _Home_State extends State<Home> {
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image: NetworkImage(
+                                      image: AssetImage(
                                           '${radioList[i].image}')),
                                   borderRadius: BorderRadius.circular(50.0),
                                   boxShadow: [

@@ -60,7 +60,7 @@ class BottomPanel extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                     child: FadeInImage(
                       placeholder: AssetImage(curPlayList[curPos].image),
-                      image: NetworkImage(curPlayList[curPos].image),
+                      image: AssetImage(curPlayList[curPos].image),
                       width: 50,
                       height: 50,
                       fit: BoxFit.cover,

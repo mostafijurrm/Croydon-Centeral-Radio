@@ -96,8 +96,9 @@ class _PlayerWidgetState extends State<Now_Playing> {
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: FadeInImage(
-                    placeholder: AssetImage(curPlayList[curPos].image),
-                    image: NetworkImage(curPlayList[curPos].image),
+                    placeholder: AssetImage(curPlayList[curPos].image
+                    ),
+                    image: AssetImage(curPlayList[curPos].image),
                     width: 150,
                     height: 150,
                     fit: BoxFit.cover,
