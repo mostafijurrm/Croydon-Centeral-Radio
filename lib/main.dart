@@ -850,7 +850,7 @@ class _MyHomePageState extends State<MyHomePage>
             physics: BouncingScrollPhysics(),
             children: <Widget>[
               Image.asset(
-                'assets/image/android_icon.png',
+                'assets/image/icon.png',
                 width: 150,
                 height: 150,
               ),
@@ -877,6 +877,19 @@ class _MyHomePageState extends State<MyHomePage>
                   onTap: () {
                     Navigator.pop(context);
                     UrlLauncher.url(Strings.facebookUrl);
+                  }),
+              ListTile(
+                  leading: Icon(
+                      FontAwesomeIcons.twitter,
+                      color: Colors.white
+                  ),
+                  title: Text(
+                    'Twitter',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    UrlLauncher.url(Strings.twitterUrl);
                   }),
               /*ListTile(
                   leading: Icon(Icons.radio, color: Colors.white),

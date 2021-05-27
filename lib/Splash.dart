@@ -56,7 +56,7 @@ class _SplashScreen extends State<Splash> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset(
-                'assets/image/android_icon.png',
+                'assets/image/icon.png',
                 width: 250,
                 height: 250,
               ),

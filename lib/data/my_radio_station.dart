@@ -17,7 +17,7 @@ class MyRadioStationList {
         id: '1',
         city_id: '10',
         cat_id: '100',
-        name: 'Classic Reggae',
+        name: 'Power Up Classic',
         radio_url: 'https://radio.openview24.com/radio/8110/radio.mp3',
         image: 'assets/image/stations/1.png',
           description: 'Feel The Music'
@@ -26,7 +26,7 @@ class MyRadioStationList {
           id: '2',
           city_id: '20',
           cat_id: '200',
-          name: 'Dancehall Raw',
+          name: 'Power Up Raw',
           radio_url: 'https://radio.openview24.com/radio/8060/radio.mp3',
           image: 'assets/image/stations/2.png',
         description: 'Feel The Music'
@@ -35,7 +35,7 @@ class MyRadioStationList {
           id: '3',
           city_id: '30',
           cat_id: '300',
-          name: 'Mega Hits Station',
+          name: 'Power Up Hits',
           radio_url: 'https://radio.openview24.com/radio/8070/radio.mp3',
           image: 'assets/image/stations/3.png',
           description: 'Feel The Music'
@@ -44,7 +44,7 @@ class MyRadioStationList {
           id: '4',
           city_id: '40',
           cat_id: '400',
-          name: 'Soca City',
+          name: 'Power Up Soca',
           radio_url: 'https://radio.openview24.com/radio/8020/radio.mp3',
           image: 'assets/image/stations/4.png',
           description: 'Feel The Music'
@@ -53,7 +53,7 @@ class MyRadioStationList {
           id: '5',
           city_id: '50',
           cat_id: '500',
-          name: 'Slow Jams/RnB Station',
+          name: 'Power Up RnB',
           radio_url: 'https://radio.openview24.com/radio/8030/radio.mp3',
           image: 'assets/image/stations/5.png',
           description: 'Feel The Music'
@@ -62,7 +62,7 @@ class MyRadioStationList {
           id: '6',
           city_id: '60',
           cat_id: '600',
-          name: 'Dance Nation',
+          name: 'Power up Dance',
           radio_url: 'https://radio.openview24.com/radio/8040/radio.mp3',
           image: 'assets/image/stations/6.png',
           description: 'Feel The Music'
@@ -71,7 +71,7 @@ class MyRadioStationList {
           id: '7',
           city_id: '70',
           cat_id: '700',
-          name: 'Reggae On The City',
+          name: 'Power Up Reggae',
           radio_url: 'https://radio.openview24.com/radio/8010/radio.mp3',
           image: 'assets/image/stations/7.png',
           description: 'Feel The Music'
@@ -80,7 +80,7 @@ class MyRadioStationList {
           id: '8',
           city_id: '80',
           cat_id: '800',
-          name: 'Hip-Hop Station',
+          name: 'Power Up Hip-Hop',
           radio_url: 'https://radio.openview24.com/radio/8100/radio.mp3',
           image: 'assets/image/stations/8.png',
           description: 'Feel The Music'
@@ -89,7 +89,7 @@ class MyRadioStationList {
           id: '9',
           city_id: '90',
           cat_id: '900',
-          name: 'Dancehall Rave',
+          name: 'Power Up Dancehall',
           radio_url: 'https://radio.openview24.com/radio/8050/radio.mp3',
           image: 'assets/image/stations/9.png',
           description: 'Feel The Music'
@@ -98,7 +98,7 @@ class MyRadioStationList {
           id: '10',
           city_id: '100',
           cat_id: '1000',
-          name: 'Smooth Jazz',
+          name: 'Power Up  Jazz',
           radio_url: 'https://radio.openview24.com/radio/8090/radio.mp3',
           image: 'assets/image/stations/10.png',
           description: 'Feel The Music'
@@ -107,7 +107,7 @@ class MyRadioStationList {
           id: '11',
           city_id: '1100',
           cat_id: '11000',
-          name: 'Croydon Central Live',
+          name: 'Power Up FM',
           radio_url: 'https://radio.openview24.com/radio/8120/radio.mp3',
           image: 'assets/image/stations/11.png',
           description: 'Feel The Music'

@@ -55,12 +55,12 @@ dev_dependencies:
   flutter_launcher_icons: ^0.8.0
 
 flutter_launcher_name:
-  name: "CROYDON CENTRAL RADIO"
+  name: 'POWER UP FM'
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/image/android_icon.png"
+  image_path: "assets/image/icon.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

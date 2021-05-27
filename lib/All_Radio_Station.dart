@@ -182,7 +182,7 @@ class _Player_State extends State<Radio_Station> {
                           borderRadius: BorderRadius.circular(5),
                           child: FadeInImage(
                             placeholder: AssetImage(
-                              'assets/image/placeholder.png',
+                              'assets/image/icon.png',
                             ),
                             image: AssetImage(
                               myStation.image,
