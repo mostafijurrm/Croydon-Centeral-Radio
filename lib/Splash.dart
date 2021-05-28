@@ -40,38 +40,11 @@ class _SplashScreen extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          color: CustomColor.primaryColor
-          /*image: DecorationImage(
-            image: AssetImage('assets/image/back.png'),
-            fit: BoxFit.fill,
-          ),*/
-        ),
-        child: Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(
-                'assets/image/icon.png',
-                width: 250,
-                height: 250,
-              ),
-              SizedBox(height: 20,),
-              Text(
-                Strings.appName,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white
-                ),
-              )
-            ],
-          ),
-        ),
+      body: Image.asset(
+        'assets/image/splash_logo.jpg',
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        fit: BoxFit.cover,
       ),
     );
   }
