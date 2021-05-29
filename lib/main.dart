@@ -834,25 +834,15 @@ class _MyHomePageState extends State<MyHomePage>
     return Drawer(
       child: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [
-                  secondary,
-                  primary.withOpacity(0.5),
-                  primary.withOpacity(0.8)
-                ],
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight,
-                // Add one stop for each color. Stops should increase from 0 to 1
-                stops: [0.2, 0.4, 0.9],
-                tileMode: TileMode.clamp),
+            color: Colors.black
           ),
           child: ListView(
             physics: BouncingScrollPhysics(),
             children: <Widget>[
               Image.asset(
                 'assets/image/icon.png',
-                width: 150,
-                height: 150,
+                width: MediaQuery.of(context).size.width,
+                height: 200,
               ),
               /*ListTile(
                   leading: Icon(Icons.home, color: Colors.white),
