@@ -5,7 +5,6 @@ import 'package:app_review/app_review.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:croydoncentralradio/Splash.dart';
 import 'package:croydoncentralradio/class/url_launcher.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -93,7 +92,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  // FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   StreamSubscription _streamSubscription;
   GlobalKey<ScaffoldState> _globalKey = GlobalKey();
   final TextEditingController _controller = TextEditingController();
@@ -134,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage>
     panelController = PanelController();
     // Initialize the Tab Controller
     tabController = TabController(length: 1, vsync: this);
-    firebaseCloudMessaging_Listeners();
+    // firebaseCloudMessaging_Listeners();
 
     tempSongList.clear();
     radioList.clear();
@@ -287,7 +286,7 @@ class _MyHomePageState extends State<MyHomePage>
                 ]))));
   }
 
-  void firebaseCloudMessaging_Listeners() {
+  /*void firebaseCloudMessaging_Listeners() {
     if (Platform.isIOS) iOS_Permission();
 
     _firebaseMessaging.getToken().then((token) {
@@ -307,12 +306,12 @@ class _MyHomePageState extends State<MyHomePage>
         // print('onlaunch $message');
         await myBackgroundMessageHandler(message);
       },
-      /*    onBackgroundMessage:(Map<String, dynamic> message) async {
+      *//*    onBackgroundMessage:(Map<String, dynamic> message) async {
         print('on message $message');
         myBackgroundMessageHandler(message);
-      },*/
+      },*//*
     );
-  }
+  }*/
 
   static Future<dynamic> myBackgroundMessageHandler(
       Map<String, dynamic> message) async {
@@ -393,13 +392,13 @@ class _MyHomePageState extends State<MyHomePage>
     // if (error.compareTo('false') == 0) {}
   }
 
-  void iOS_Permission() {
+  /*void iOS_Permission() {
     _firebaseMessaging.requestNotificationPermissions(
         IosNotificationSettings(sound: true, badge: true, alert: true));
     _firebaseMessaging.onIosSettingsRegistered.listen((settings) {
       //  print("Settings registered: $settings");
     });
-  }
+  }*/
 
   Future<bool> _onWillPop() async {
     //print('on back********$catVisible***$cityVisible*****$radioVisible');
