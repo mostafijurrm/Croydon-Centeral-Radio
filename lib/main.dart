@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Radio App',
       theme: ThemeData(
-        primarySwatch: Colors.pink,
+        primarySwatch: CustomColor.appBarColor,
       ),
       home: Directionality(
         textDirection: direction, // set this property
