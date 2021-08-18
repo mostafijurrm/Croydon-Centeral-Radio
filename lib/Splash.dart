@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:croydoncentralradio/utils/custom_color.dart';
+import 'package:croydoncentralradio/class/custom_loading.dart';
+import 'package:croydoncentralradio/model/general_data.dart';
+import 'package:croydoncentralradio/urls/endpoints.dart';
+import 'package:croydoncentralradio/urls/urls.dart';
 import 'package:croydoncentralradio/utils/strings.dart';
+import 'package:flutter/material.dart';
 
 import 'Helper/Constant.dart';
 import 'main.dart';
@@ -34,46 +37,43 @@ class _SplashScreen extends State<Splash> {
     //getcityMode();
 
 
-    startTime();
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Center(
-        child: Image.asset(
-          'assets/image/icon.png',
-          width: MediaQuery.of(context).size.width,
-          //height: 180,
-          //fit: BoxFit.cover,
-        ),
+      body: FutureBuilder<GeneralData> (
+        future: _getGeneralData(),
+        builder: (context, snapshot) {
+          if(snapshot.hasData)  {
+            final data = snapshot.data.data;
+            startTime();
+            Strings.appName = data.sitename;
+            return Center(
+              child: CircleAvatar(
+                radius: 200,
+                backgroundImage: NetworkImage(
+                    data.icon
+                ),
+              ),
+            );
+          }
+          return CustomLoading();
+        },
       ),
     );
   }
 
-  Future<void> getcityMode() async {
-    var data = {'access_key': '6808'};
-    var response = await http.post(city_mode, body: data);
+  Future<GeneralData> _getGeneralData () async {
+    Uri url = Uri.parse('${Urls.mainUrl}${Endpoints.generalData}');
 
-    print("responce****city mode**${response.body.toString()}");
+    final response = await http.get(url);
+    var data = jsonDecode(response.body);
 
-    var getdata = json.decode(response.body);
+    print('response: $data');
+    return GeneralData.fromJson(data);
 
-    var error = getdata['error'].toString();
-    if (!mounted) return null;
-
-    if (error == 'false') {
-      var city = getdata['data'];
-
-      if (city == "1") {
-        cityMode = true;
-      } else {
-        cityMode = false;
-      }
-
-    } else {
-      cityMode = false;
-    }
   }
 }

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'dart:ui';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:croydoncentralradio/model/section_data.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:croydoncentralradio/data/my_radio_station.dart';
 import 'package:croydoncentralradio/utils/custom_color.dart';
 import 'Model.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +100,7 @@ bool cityMode = false;
 
 ///music player variable
 int curPos = 0;
-List<MyRadioStation> curPlayList = List();
+List<ChannelDatum> curPlayList = List();
 
 ///current player state
 enum PlayerState { stopped, playing, paused }
@@ -113,6 +113,7 @@ AudioPlayer audioPlayer;
 
 ///player state
 PlayerState playerState = PlayerState.stopped;
+var isPlay;
 
 ///get is currently playing
 dynamic get isPlaying => playerState == PlayerState.playing;

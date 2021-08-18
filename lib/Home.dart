@@ -1,15 +1,14 @@
 import 'dart:convert';
 
+import 'package:croydoncentralradio/model/section_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 import 'All_Radio_Station.dart';
-import 'Favorite.dart';
 import 'Helper/Constant.dart';
 import 'Helper/Model.dart';
-import 'data/my_radio_station.dart';
 import 'main.dart';
 
 ///category list
@@ -166,7 +165,7 @@ class _Home_State extends State<Home> {
                             ),
                             onTap: () {
                               curPos = i;
-                              curPlayList = projectSnap.data as List<MyRadioStation>;
+                              curPlayList = projectSnap.data as List<ChannelDatum>;
                               url =
                                   projectSnap.data[curPos].radio_url.toString();
 
@@ -238,16 +237,6 @@ class _Home_State extends State<Home> {
                   tabController.animateTo(1);
                 } else if (cls == 'Latest') {
                   tabController.animateTo(2);
-                } else if (cls == 'Favorites') {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Favorite(
-                            play: widget._play,
-                            pause: widget._pause,
-                            next: widget._next,
-                            previous: widget._previous),
-                      ));
                 }
               },
             ),
@@ -279,7 +268,7 @@ class _Home_State extends State<Home> {
                                   image: DecorationImage(
                                       fit: BoxFit.cover,
                                       image: AssetImage(
-                                          '${radioList[i].image}')),
+                                          '${radioList[i].channelLogo}')),
                                   borderRadius: BorderRadius.circular(50.0),
                                   boxShadow: [
                                     BoxShadow(
@@ -293,7 +282,7 @@ class _Home_State extends State<Home> {
                           child: Padding(
                             padding: EdgeInsets.all(3.0),
                             child: Text(
-                              '${radioList[i].name}',
+                              '${radioList[i].channelName}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -305,7 +294,7 @@ class _Home_State extends State<Home> {
                     onTap: () {
                       curPos = i;
                       curPlayList = radioList;
-                      url = radioList[curPos].radio_url;
+                      url = radioList[curPos].radioUrl;
 
                       position = null;
                       duration = null;

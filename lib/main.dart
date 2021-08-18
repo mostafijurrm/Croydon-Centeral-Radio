@@ -5,14 +5,15 @@ import 'package:app_review/app_review.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:croydoncentralradio/Splash.dart';
 import 'package:croydoncentralradio/class/url_launcher.dart';
+import 'package:croydoncentralradio/model/section_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_radio_player/flutter_radio_player.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 import 'package:phone_state_i/phone_state_i.dart';
-import 'package:croydoncentralradio/data/my_radio_station.dart';
 import 'package:croydoncentralradio/utils/custom_color.dart';
 import 'package:croydoncentralradio/utils/strings.dart';
 
@@ -63,7 +64,7 @@ int total = 0;
 int perPage = 10;
 
 ///temp radio list for load more
-List<MyRadioStation> tempSongList = [];
+List<ChannelDatum> tempSongList = [];
 
 ///is error exist
 bool errorExist = false;
@@ -97,6 +98,7 @@ class _MyHomePageState extends State<MyHomePage>
   GlobalKey<ScaffoldState> _globalKey = GlobalKey();
   final TextEditingController _controller = TextEditingController();
   DateTime _currentBackPressTime;
+  FlutterRadioPlayer _flutterRadioPlayer = new FlutterRadioPlayer();
 
   Icon iconSearch = Icon(
     Icons.search,
@@ -258,173 +260,18 @@ class _MyHomePageState extends State<MyHomePage>
                       textController: _controller,
                     ),
                   ),
-                  /*Directionality(
-                    textDirection: direction, // set this property
-                    child: Home(
-                      play: _play,
-                      pause: _pause,
-                      next: _next,
-                      previous: _previous,
-                    ),
-                  ),
-                  Directionality(
-                    textDirection: direction, // set this property
-                    child: cityMode
-                        ? City(
-                            play: _play,
-                            refresh: _refresh,
-                            next: _next,
-                            previous: _previous,
-                            pause: _pause)
-                        : Category(
-                            play: _play,
-                            refresh: _refresh,
-                            next: _next,
-                            previous: _previous,
-                            pause: _pause),
-                  ),*/
-                ]))));
-  }
-
-  /*void firebaseCloudMessaging_Listeners() {
-    if (Platform.isIOS) iOS_Permission();
-
-    _firebaseMessaging.getToken().then((token) {
-      _registerToken(token);
-    });
-
-    _firebaseMessaging.configure(
-      onMessage: (message) async {
-        //print('onmessage $message');
-        await myBackgroundMessageHandler(message);
-      },
-      onResume: (message) async {
-        // print('onresume $message');
-        await myBackgroundMessageHandler(message);
-      },
-      onLaunch: (message) async {
-        // print('onlaunch $message');
-        await myBackgroundMessageHandler(message);
-      },
-      *//*    onBackgroundMessage:(Map<String, dynamic> message) async {
-        print('on message $message');
-        myBackgroundMessageHandler(message);
-      },*//*
+                ])
+            )
+        )
     );
-  }*/
-
-  static Future<dynamic> myBackgroundMessageHandler(
-      Map<String, dynamic> message) async {
-    if (message.containsKey('data') || message.containsKey('notification')) {
-      // Handle data message
-
-      var data = message['notification'];
-
-      var image = data['image'].toString();
-      var title = data['title'].toString();
-      var msg = data['message'].toString();
-      // String radio_id = data["radio_station_id"].toString();
-
-      //  print("data***$image**$title**$msg***$data1***$data");
-
-      if (image != null) {
-        var bigPicturePath = await _downloadAndSaveImage(image, 'bigPicture');
-        var bigPictureStyleInformation = BigPictureStyleInformation(
-            bigPicturePath, BitmapSource.FilePath,
-            hideExpandedLargeIcon: true,
-            contentTitle: '$title',
-            htmlFormatContentTitle: true,
-            summaryText: '$msg',
-            htmlFormatSummaryText: true);
-        var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-            'big text channel id',
-            'big text channel name',
-            'big text channel description',
-            largeIcon: bigPicturePath,
-            largeIconBitmapSource: BitmapSource.FilePath,
-            style: AndroidNotificationStyle.BigPicture,
-            styleInformation: bigPictureStyleInformation);
-        var platformChannelSpecifics =
-        NotificationDetails(androidPlatformChannelSpecifics, null);
-        await flutterLocalNotificationsPlugin.show(
-            0, '$title', '$msg', platformChannelSpecifics);
-      } else {
-        var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-            'your channel id', 'your channel name', 'your channel description',
-            importance: Importance.Max,
-            priority: Priority.High,
-            ticker: 'ticker');
-        var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-        var platformChannelSpecifics = NotificationDetails(
-            androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-        await flutterLocalNotificationsPlugin
-            .show(0, title, msg, platformChannelSpecifics, payload: 'item x');
-      }
-
-      // print('on message $data');
-    }
   }
-
-  static Future<String> _downloadAndSaveImage(
-      String url, String fileName) async {
-    var directory = await getApplicationDocumentsDirectory();
-    var filePath = '${directory.path}/$fileName';
-    var response = await http.get(url);
-
-    // print("path***$filePath");
-    var file = File(filePath);
-    await file.writeAsBytes(response.bodyBytes);
-    return filePath;
-  }
-
-  void _registerToken(String token) async {
-    var data = {'access_key': '6808', 'token': token};
-
-    var response = await http.post(
-      token_api,
-      body: data,
-    );
-    // print('Response status: ${response.statusCode}');
-    //  print('Response body: ${response.body}***$token_api**$data');
-
-    var getdata = json.decode(response.body);
-    //var error = getdata['error'].toString();
-    // if (error.compareTo('false') == 0) {}
-  }
-
-  /*void iOS_Permission() {
-    _firebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.onIosSettingsRegistered.listen((settings) {
-      //  print("Settings registered: $settings");
-    });
-  }*/
 
   Future<bool> _onWillPop() async {
-    //print('on back********$catVisible***$cityVisible*****$radioVisible');
 
     if (!panelController.isPanelClosed()) {
       panelController.close();
       return Future<bool>.value(false);
-    }/* else if (!cityMode && !catVisible && tabController.index == 1) {
-      setState(() {
-        catVisible = true;
-      });
-      return Future<bool>.value(false);
-    } else if (cityMode && catVisible && tabController.index == 1) {
-      setState(() {
-        catVisible = false;
-        cityVisible = true;
-      });
-      return Future<bool>.value(false);
-    } else if (cityMode && radioVisible && tabController.index == 1) {
-      setState(() {
-        radioVisible = false;
-        catVisible = true;
-        cityVisible = false;
-      });
-      return Future<bool>.value(false);
-    }*/ else if (_globalKey.currentState.isDrawerOpen) {
+    } else if (_globalKey.currentState.isDrawerOpen) {
       Navigator.pop(context); // closes the drawer if opened
       return Future.value(false); // won't exit the app
     } else {
@@ -487,52 +334,9 @@ class _MyHomePageState extends State<MyHomePage>
     radioList.addAll(tempSongList);
 
     //curPlayList = radioList;
-    curPlayList = MyRadioStationList.list();
+    // curPlayList = ChannelDatum() as List;
 
-    url = curPlayList[1].radio_url;
-
-    /*
-    var data = {
-      'access_key': '6808',
-      'limit': perPage.toString(),
-      'offset': offset.toString()
-    };
-    var response = await http.post(radio_station, body: data);
-
-    //print("responce***getting**${response.body.toString()}");
-
-    var getdata = json.decode(response.body);
-    total = int.parse(getdata['total'].toString());
-    var error = getdata['error'].toString();
-
-    setState(() {
-      if (error == 'true' || (total) == 0) {
-        loading = false;
-        errorExist = true;
-      } else {
-        var gData = getdata['data'];
-
-        loading = false;
-
-        if ((offset) < total) {
-          tempSongList.clear();
-
-          *//*tempSongList = (gData as List)
-              .map((data) => MyRadioStation.fromJson(data as Map<String, dynamic>))
-              .toList();*//*
-
-
-          radioList.addAll(tempSongList);
-
-          //curPlayList = radioList;
-          curPlayList = MyRadioStationList.list();
-
-          url = curPlayList[0].radio_url;
-          print('curPlayList url: '+ url.toString());
-          offset = offset + perPage;
-        }
-      }
-    });*/
+    url = curPlayList[1].radioUrl;
   }
 
   void initAudioPlayer() {
@@ -554,7 +358,7 @@ class _MyHomePageState extends State<MyHomePage>
             title: '$appname',
             artist: '${curPlayList[curPos].description}',
             //albumTitle: '${curPlayList[curPos].cat_name}',
-            imageUrl: '${curPlayList[curPos].image}',
+            imageUrl: '${curPlayList[curPos].channelLogo}',
             forwardSkipInterval: const Duration(seconds: 30),
             // default is 30s
             backwardSkipInterval: const Duration(seconds: 30),
@@ -616,7 +420,7 @@ class _MyHomePageState extends State<MyHomePage>
 
       position = null;
       duration = null;
-      url = curPlayList[curPos].radio_url;
+      url = curPlayList[curPos].radioUrl;
       _play();
     } else {
       curPos = curPos - 1;
@@ -630,7 +434,7 @@ class _MyHomePageState extends State<MyHomePage>
       audioPlayer.pause();
       position = null;
       duration = null;
-      url = curPlayList[curPos].radio_url;
+      url = curPlayList[curPos].radioUrl;
       _play();
     } else {
       curPos = curPos + 1;
@@ -638,37 +442,48 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void _play() async {
-    final playPosition = (position != null &&
-        duration != null &&
-        position.inMilliseconds > 0 &&
-        position.inMilliseconds < duration.inMilliseconds)
-        ? position
-        : null;
+    // final playPosition = (position != null &&
+    //     duration != null &&
+    //     position.inMilliseconds > 0 &&
+    //     position.inMilliseconds < duration.inMilliseconds)
+    //     ? position
+    //     : null;
+    //
+    // print("play current**$url");
+    // final result =
+    // await audioPlayer.play(url, isLocal: isLocal, position: playPosition);
+    initRadioService(url);
+    // if (!mounted) {
+    //   return;
+    // }
+    // if (result == 1) {
+    //   setState(() {
+    //     playerState = PlayerState.playing;
+    //   });
+    // }
 
-    print("play current**$url");
-    final result =
-    await audioPlayer.play(url, isLocal: isLocal, position: playPosition);
-    if (!mounted) {
-      return;
-    }
-    if (result == 1) {
-      setState(() {
-        playerState = PlayerState.playing;
-      });
-    }
-
-    if (Platform.isIOS) {
-      await audioPlayer.setPlaybackRate(playbackRate: 1.0);
-    }
+    // if (Platform.isIOS) {
+    //   await audioPlayer.setPlaybackRate(playbackRate: 1.0);
+    // }
   }
 
   void _pause() async {
 
-    if(Platform.isIOS){
-      final result = await audioPlayer.pause();
-      if (result == 1) {
-        setState(() => playerState = PlayerState.paused);
-      }
+    _flutterRadioPlayer.pause();
+    setState(() {
+      isPlay = FlutterRadioPlayer.flutter_radio_paused;
+      print('pause radio:');
+    });
+    /*if(Platform.isIOS){
+      _flutterRadioPlayer.pause();
+      setState(() {
+        isPlay = FlutterRadioPlayer.flutter_radio_paused;
+        print('pause radio: $isPlay');
+      });
+      // final result = await audioPlayer.pause();
+      // if (result == 1) {
+      //   setState(() => playerState = PlayerState.paused);
+      // }
     }else {
       if (duration != null) {
         final result = await audioPlayer.pause();
@@ -676,6 +491,19 @@ class _MyHomePageState extends State<MyHomePage>
           setState(() => playerState = PlayerState.paused);
         }
       }
+    }*/
+  }
+
+  Future<void> initRadioService(String url) async {
+    try {
+      await _flutterRadioPlayer.init(
+          Strings.appName, Strings.appName, url, "true");
+      setState(() {
+        isPlay = FlutterRadioPlayer.flutter_radio_playing;
+        print('playing radio: ');
+      });
+    } on PlatformException {
+      print("Exception occurred while trying to register the services.");
     }
   }
 

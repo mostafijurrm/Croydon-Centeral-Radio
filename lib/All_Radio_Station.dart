@@ -1,12 +1,17 @@
+import 'dart:convert';
+
+import 'package:croydoncentralradio/class/custom_loading.dart';
+import 'package:croydoncentralradio/model/section_data.dart';
+import 'package:croydoncentralradio/urls/endpoints.dart';
+import 'package:croydoncentralradio/urls/urls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:croydoncentralradio/data/my_radio_station.dart';
-
+import 'package:http/http.dart' as http;
 import 'Helper/Constant.dart';
 import 'main.dart';
 
 ///get radio station lilst
-List<MyRadioStation> radioList = [];
+List<ChannelDatum> radioList = [];
 
 ///all radios
 class Radio_Station extends StatefulWidget {
@@ -58,117 +63,7 @@ class _Player_State extends State<Radio_Station> {
     }
   }
 
-  /*Widget listItem(int index, List<Model> radioList) {
-    return GestureDetector(
-      child: Card(
-          elevation: 5.0,
-          child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Row(
-                children: <Widget>[
-                  Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: FadeInImage(
-                            placeholder: AssetImage(
-                              'assets/image/placeholder.png',
-                            ),
-                            image: NetworkImage(
-                              radioList[index].image,
-                            ),
-                            width: 60,
-                            height: 60,
-                            fit: BoxFit.cover,
-                          ))),
-                  Expanded(
-                      child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                radioList[index].name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subhead
-                                    .copyWith(fontWeight: FontWeight.bold),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                // dense: true,
-                              ),
-                              Text(
-                                radioList[index].description,
-                                style: Theme.of(context).textTheme.caption,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                // dense: true,
-                              ),
-                            ],
-                          ))),
-                  IconButton(
-                      icon: Icon(
-                        Icons.play_arrow,
-                        size: 40,
-                        color: primary,
-                      ),
-                      onPressed: null),
-                  FutureBuilder(
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return snapshot.data == true
-                            ? IconButton(
-                                icon: Icon(
-                                  Icons.favorite,
-                                  size: 30,
-                                  color: primary,
-                                ),
-                                onPressed: () async {
-                                  await db.removeFav(radioList[index].id);
-                                  if (!mounted) return;
-                                  setState(() {});
-
-                                  widget._refresh();
-                                })
-                            : IconButton(
-                                icon: Icon(
-                                  Icons.favorite_border,
-                                  size: 30,
-                                  color: primary,
-                                ),
-                                onPressed: () async {
-                                  await db.setFav(
-                                      radioList[index].id,
-                                      radioList[index].name,
-                                      radioList[index].description,
-                                      radioList[index].image,
-                                      radioList[index].radio_url);
-                                  if (!mounted) return;
-                                  setState(() {});
-
-                                  widget._refresh();
-                                });
-                      } else {
-                        return Container();
-                      }
-                    },
-                    future: db.getFav(radioList[index].id),
-                  ),
-                ],
-              ))),
-      onTap: () {
-        curPos = index;
-        curPlayList = radioList;
-        url = radioList[curPos].radio_url;
-        position = null;
-        duration = null;
-        widget._play();
-
-        // print("current len**${curPlayList.length}");
-      },
-    );
-  }*/
-  Widget listItem(MyRadioStation myStation, int index) {
+  Widget listItem(ChannelDatum myStation, int index) {
     return GestureDetector(
       child: Card(
           elevation: 5.0,
@@ -184,8 +79,8 @@ class _Player_State extends State<Radio_Station> {
                             placeholder: AssetImage(
                               'assets/image/icon.png',
                             ),
-                            image: AssetImage(
-                              myStation.image,
+                            image: NetworkImage(
+                              myStation.channelLogo,
                             ),
                             width: 60,
                             height: 60,
@@ -198,7 +93,7 @@ class _Player_State extends State<Radio_Station> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                myStation.name,
+                                myStation.channelName,
                                 style: Theme.of(context)
                                     .textTheme
                                     .subhead
@@ -234,7 +129,7 @@ class _Player_State extends State<Radio_Station> {
                                   color: primary,
                                 ),
                                 onPressed: () async {
-                                  await db.removeFav(myStation.id);
+                                  // await db.removeFav(myStation.id);
                                   if (!mounted) return;
                                   setState(() {});
 
@@ -247,12 +142,12 @@ class _Player_State extends State<Radio_Station> {
                                   color: primary,
                                 ),
                                 onPressed: () async {
-                                  await db.setFav(
+                                  /*await db.setFav(
                                       myStation.id,
                                       myStation.name,
                                       myStation.description,
                                       myStation.image,
-                                      myStation.radio_url);
+                                      myStation.radio_url);*/
                                   if (!mounted) return;
                                   setState(() {});
 
@@ -262,14 +157,14 @@ class _Player_State extends State<Radio_Station> {
                         return Container();
                       }
                     },
-                    future: db.getFav(myStation.id),
+                    // future: db.getFav(myStation.id),
                   ),
                 ],
               ))),
       onTap: () {
         curPos = index;
         //curPlayList = radioList;
-        url = myStation.radio_url;
+        url = myStation.radioUrl;
         position = null;
         duration = null;
         widget._play();
@@ -290,23 +185,28 @@ class _Player_State extends State<Radio_Station> {
   }
 
   getList() {
-    return Padding(
-        padding: const EdgeInsets.only(bottom: 190.0),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  controller: _controller,
-                  itemCount: MyRadioStationList.list().length,
-                  itemBuilder: (context, index) {
-                    MyRadioStation myStation = MyRadioStationList.list()[index];
-                    return (index == MyRadioStationList.list().length)
-                        ? Center(child: CircularProgressIndicator())
-                        : listItem(myStation, index);
-                  },
-                ),
+    return FutureBuilder<SectionData>(
+        future: _getSectionData(),
+        builder: (context, snapshot) {
+          if(snapshot.hasData) {
+            final data = snapshot.data.data.channelData;
+            curPlayList = data;
+            return Padding(
+                padding: const EdgeInsets.only(bottom: 190.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                    physics: BouncingScrollPhysics(),
+                    controller: _controller,
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      return (index == data.length)
+                          ? CustomLoading()
+                          : listItem(data[index], index);
+                    },
+                  ),
 
-          /*
+                  /*
           ListView.builder(
                   physics: BouncingScrollPhysics(),
                   controller: _controller,
@@ -333,11 +233,29 @@ class _Player_State extends State<Radio_Station> {
                   },
                 )
            */
-        ));
+                ));
+          }
+          return CustomLoading();
+        }
+    );
   }
 
   getLoader() {
     return Container(
         height: 200, child: Center(child: CircularProgressIndicator()));
+  }
+
+  Future<SectionData> _getSectionData () async {
+    Uri url = Uri.parse('${Urls.mainUrl}${Endpoints.sectionData}');
+
+    final response = await http.get(url);
+    var data = jsonDecode(response.body);
+
+    setState(() {
+
+    });
+    print('response: $data');
+    return SectionData.fromJson(data);
+
   }
 }

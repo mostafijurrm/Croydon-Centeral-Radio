@@ -59,8 +59,8 @@ class BottomPanel extends StatelessWidget {
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
                     child: FadeInImage(
-                      placeholder: AssetImage(curPlayList[curPos].image),
-                      image: AssetImage(curPlayList[curPos].image),
+                      placeholder: NetworkImage(curPlayList[curPos].channelLogo),
+                      image: NetworkImage(curPlayList[curPos].channelLogo),
                       width: 50,
                       height: 50,
                       fit: BoxFit.cover,
@@ -74,7 +74,7 @@ class BottomPanel extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Text(
-                        curPlayList[curPos].name,
+                        curPlayList[curPos].channelName,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(fontSize: 15, color: Colors.white),
                       ),
@@ -96,7 +96,7 @@ class BottomPanel extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () async {
-              if (curPlayList[curPos].radio_url == null) {
+              if (curPlayList[curPos].radioUrl == null) {
                 return;
               }
 

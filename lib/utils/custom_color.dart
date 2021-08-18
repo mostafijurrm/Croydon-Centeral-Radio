@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class CustomColor {
   static const Color primaryColor = Color(0xFF1c0707);
-  static const Color secondaryColor = Color(0xFF542222);
+  static const Color secondaryColor = Color(0xFF1c0707);
   static const MaterialColor appBarColor = const MaterialColor(
     0xffe55f48, // 0% comes in here, this will be color picked if no shade is selected when defining a Color property which doesn’t require a swatch.
     const <int, Color>{
