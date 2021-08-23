@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:app_review/app_review.dart';
+import 'package:audio_service/audio_service.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:croydoncentralradio/Splash.dart';
 import 'package:croydoncentralradio/class/url_launcher.dart';
 import 'package:croydoncentralradio/model/section_data.dart';
+import 'package:croydoncentralradio/screens/notifications_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -149,6 +151,7 @@ class _MyHomePageState extends State<MyHomePage>
     firNotInitialize();
 
     handlePhoneCall();
+    _openNotification();
   }
 
   @override
@@ -430,7 +433,7 @@ class _MyHomePageState extends State<MyHomePage>
   void _previous() {
     curPos = curPos - 1;
     if (curPos >= 0) {
-      // _pause();
+       _pause();
       audioPlayer.pause();
       position = null;
       duration = null;
@@ -442,48 +445,37 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void _play() async {
-    // final playPosition = (position != null &&
-    //     duration != null &&
-    //     position.inMilliseconds > 0 &&
-    //     position.inMilliseconds < duration.inMilliseconds)
-    //     ? position
-    //     : null;
-    //
-    // print("play current**$url");
-    // final result =
-    // await audioPlayer.play(url, isLocal: isLocal, position: playPosition);
-    initRadioService(url);
-    // if (!mounted) {
-    //   return;
-    // }
-    // if (result == 1) {
-    //   setState(() {
-    //     playerState = PlayerState.playing;
-    //   });
-    // }
+    final playPosition = (position != null &&
+        duration != null &&
+        position.inMilliseconds > 0 &&
+        position.inMilliseconds < duration.inMilliseconds)
+        ? position
+        : null;
 
-    // if (Platform.isIOS) {
-    //   await audioPlayer.setPlaybackRate(playbackRate: 1.0);
-    // }
+    print("play current**$url");
+    final result =
+    await audioPlayer.play(url, isLocal: isLocal, position: playPosition);
+    if (!mounted) {
+      return;
+    }
+    if (result == 1) {
+      setState(() {
+        playerState = PlayerState.playing;
+      });
+    }
+
+    if (Platform.isIOS) {
+      await audioPlayer.setPlaybackRate(playbackRate: 1.0);
+    }
   }
 
   void _pause() async {
 
-    _flutterRadioPlayer.pause();
-    setState(() {
-      isPlay = FlutterRadioPlayer.flutter_radio_paused;
-      print('pause radio:');
-    });
-    /*if(Platform.isIOS){
-      _flutterRadioPlayer.pause();
-      setState(() {
-        isPlay = FlutterRadioPlayer.flutter_radio_paused;
-        print('pause radio: $isPlay');
-      });
-      // final result = await audioPlayer.pause();
-      // if (result == 1) {
-      //   setState(() => playerState = PlayerState.paused);
-      // }
+    if(Platform.isIOS){
+      final result = await audioPlayer.pause();
+      if (result == 1) {
+        setState(() => playerState = PlayerState.paused);
+      }
     }else {
       if (duration != null) {
         final result = await audioPlayer.pause();
@@ -491,19 +483,6 @@ class _MyHomePageState extends State<MyHomePage>
           setState(() => playerState = PlayerState.paused);
         }
       }
-    }*/
-  }
-
-  Future<void> initRadioService(String url) async {
-    try {
-      await _flutterRadioPlayer.init(
-          Strings.appName, Strings.appName, url, "true");
-      setState(() {
-        isPlay = FlutterRadioPlayer.flutter_radio_playing;
-        print('playing radio: ');
-      });
-    } on PlatformException {
-      print("Exception occurred while trying to register the services.");
     }
   }
 
@@ -619,6 +598,17 @@ class _MyHomePageState extends State<MyHomePage>
         ),
       ),
       centerTitle: true,
+      actions: [
+        IconButton(
+          icon: Icon(
+            Icons.notifications,
+            color: Colors.white
+          ),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationsScreen()));
+          },
+        )
+      ],
       bottom: getTabBar(),
       /*actions: <Widget>[
         IconButton(
@@ -788,5 +778,40 @@ class _MyHomePageState extends State<MyHomePage>
             ],
           )),
     );
+  }
+
+  _openNotification() async {
+    final mediaItem = MediaItem(
+      id: "https://foo.bar/baz.mp3",
+      album: "Foo",
+      title: "Bar",
+    );
+    // Tell the UI and media notification what we're playing.
+    AudioServiceBackground.setMediaItem(mediaItem);
+    // Listen to state changes on the player...
+   /* audioPlayer.playerStateStream.listen((playerState) {
+      // ... and forward them to all audio_service clients.
+      AudioServiceBackground.setState(
+        playing: playerState.playing,
+        // Every state from the audio player gets mapped onto an audio_service state.
+        *//*processingState: {
+          ProcessingState.none: AudioProcessingState.none,
+          ProcessingState.loading: AudioProcessingState.connecting,
+          ProcessingState.buffering: AudioProcessingState.buffering,
+          ProcessingState.ready: AudioProcessingState.ready,
+          ProcessingState.completed: AudioProcessingState.completed,
+        }[playerState.processingState],*//*
+        // Tell clients what buttons/controls should be enabled in the
+        // current state.
+        controls: [
+          playerState.playing ? MediaControl.pause : MediaControl.play,
+          MediaControl.stop,
+        ],
+      );
+    });*/
+    // Play when ready.
+    audioPlayer.play(url);
+    // Start loading something (will play when ready).
+    await audioPlayer.setUrl(mediaItem.id);
   }
 }

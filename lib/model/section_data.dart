@@ -49,6 +49,7 @@ class Data {
     this.socialIcons,
     this.footer,
     this.channelData,
+    this.notifications,
   });
 
   List<Banner> banner;
@@ -62,6 +63,7 @@ class Data {
   List<ContactDetail> socialIcons;
   List<Footer> footer;
   List<ChannelDatum> channelData;
+  List<Notification> notifications;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     banner: List<Banner>.from(json["banner"].map((x) => Banner.fromJson(x))),
@@ -75,6 +77,7 @@ class Data {
     socialIcons: List<ContactDetail>.from(json["social_icons"].map((x) => ContactDetail.fromJson(x))),
     footer: List<Footer>.from(json["footer"].map((x) => Footer.fromJson(x))),
     channelData: List<ChannelDatum>.from(json["channel_data"].map((x) => ChannelDatum.fromJson(x))),
+    notifications: List<Notification>.from(json["notifications"].map((x) => Notification.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -89,6 +92,7 @@ class Data {
     "social_icons": List<dynamic>.from(socialIcons.map((x) => x.toJson())),
     "footer": List<dynamic>.from(footer.map((x) => x.toJson())),
     "channel_data": List<dynamic>.from(channelData.map((x) => x.toJson())),
+    "notifications": List<dynamic>.from(notifications.map((x) => x.toJson())),
   };
 }
 
@@ -305,6 +309,26 @@ class Gallery {
   Map<String, dynamic> toJson() => {
     "id": id,
     "image": image,
+  };
+}
+
+class Notification {
+  Notification({
+    this.title,
+    this.description,
+  });
+
+  String title;
+  String description;
+
+  factory Notification.fromJson(Map<String, dynamic> json) => Notification(
+    title: json["title"],
+    description: json["description"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "title": title,
+    "description": description,
   };
 }
 

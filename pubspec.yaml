@@ -47,6 +47,7 @@ dependencies:
   url_launcher: ^5.0.2
   font_awesome_flutter: ^9.0.0
   flutter_radio_player: ^1.0.7
+  audio_service: ^0.15.3
 
 dev_dependencies:
   flutter_test:

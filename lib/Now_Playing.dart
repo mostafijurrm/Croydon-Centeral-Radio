@@ -50,6 +50,7 @@ class _PlayerWidgetState extends State<Now_Playing> {
     //read the current volume
     _val = await VolumeControl.volume;
     setState(() {
+
     });
   }
 
@@ -78,8 +79,8 @@ class _PlayerWidgetState extends State<Now_Playing> {
                     placeholder: NetworkImage(curPlayList[curPos].channelLogo
                     ),
                     image: NetworkImage(curPlayList[curPos].channelLogo),
-                    width: 150,
-                    height: 150,
+                    width: 220,
+                    height: 220,
                     fit: BoxFit.cover,
                   )),
             ),
