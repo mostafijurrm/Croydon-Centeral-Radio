@@ -15,6 +15,7 @@ import 'package:croydoncentralradio/urls/urls.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -95,6 +96,7 @@ bool isSearching;
 ///home tab controller
 TabController tabController;
 
+List<MediaItem> myRadioList;
 ///main contianer of app
 class MyHomePage extends StatefulWidget {
   @override
@@ -145,6 +147,7 @@ class _MyHomePageState extends State<MyHomePage>
   void initState() {
     super.initState();
 
+    myRadioList = List();
     _getSectionData();
     initVolumeState();
     isSearching = false;
@@ -156,7 +159,7 @@ class _MyHomePageState extends State<MyHomePage>
     tempSongList.clear();
     radioList.clear();
 
-    getRadioStation();
+    // getRadioStation();
     loading = false;
     // initAudioPlayer();
 
@@ -244,7 +247,7 @@ class _MyHomePageState extends State<MyHomePage>
     );
 
     return WillPopScope(
-        onWillPop: _onWillPop,
+        onWillPop: _backPressed,
         child: Scaffold(
             key: _globalKey,
             appBar: getAppbar(),
@@ -256,7 +259,6 @@ class _MyHomePageState extends State<MyHomePage>
               child: StreamBuilder(
                 stream: AudioService.runningStream,
                 builder: (context, snapshot) {
-
                   final running = snapshot.data ?? false;
                   return ListView(
                     shrinkWrap: true,
@@ -286,7 +288,7 @@ class _MyHomePageState extends State<MyHomePage>
                                                         borderRadius: BorderRadius.circular(5),
                                                         child: FadeInImage(
                                                           placeholder: AssetImage(
-                                                            'assets/image/icon.png',
+                                                            'assets/image/default_image.png',
                                                           ),
                                                           image: NetworkImage(
                                                             radio[index].channelLogo,
@@ -417,20 +419,27 @@ class _MyHomePageState extends State<MyHomePage>
                               children: [
                                 if (mediaItem?.title != null) Column(
                                   children: [
-                                    Container(
-                                      height: MediaQuery.of(context).size.height * .35,
-                                      child: Center(
-                                        child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(10),
-                                            child: FadeInImage(
-                                              placeholder: NetworkImage(
-                                                  'https://radio.appdevs.net/power-up/assets/admin/images/612a7da35fceb1630174627.png'
-                                              ),
-                                              image: NetworkImage('https://radio.appdevs.net/power-up/assets/admin/images/612a7da35fceb1630174627.png'),
-                                              width: 220,
-                                              height: 220,
-                                              fit: BoxFit.cover,
-                                            )),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 20,
+                                        right: 20,
+                                        bottom: 10
+                                      ),
+                                      child: Container(
+                                        height: MediaQuery.of(context).size.height * .35,
+                                        child: Center(
+                                          child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(10),
+                                              child: FadeInImage(
+                                                placeholder: AssetImage(
+                                                    'assets/image/default_image.png'
+                                                ),
+                                                image: NetworkImage(mediaItem.artUri),
+                                                width: MediaQuery.of(context).size.width,
+                                                height: MediaQuery.of(context).size.height * .35,
+                                                fit: BoxFit.fitWidth,
+                                              )),
+                                        ),
                                       ),
                                     ),
                                     Text(
@@ -589,10 +598,23 @@ class _MyHomePageState extends State<MyHomePage>
 
     final response = await http.get(url);
     var data = jsonDecode(response.body);
-
-    print('response data: '+ data.toString());
+    List list = data['data']['channel_data'];
+    // print('response data: '+ data.toString());
+    // for(int i = 0; i < list.length; i++ ) {
+    //   setState(() {
+    //     myRadioList.add(MediaItem(
+    //       id: list[i]['channel_name'],
+    //       album: "CROYDON CENTRAL RADIO",
+    //       title: list[i]['radio_url'],
+    //       artist: "CROYDON CENTRAL RADIO",
+    //       duration: Duration(milliseconds: 0),
+    //       artUri: list[i]['channel_logo'],
+    //     ));
+    //     // print('new length: '+myRadioList.length.toString());
+    //   });
+    // }
     setState(() {
-      List list = data['data']['channel_data'];
+
 
       Strings.channelName1 = list[0]['channel_name'];
       Strings.radioUrl1 = list[0]['radio_url'];
@@ -692,40 +714,43 @@ class _MyHomePageState extends State<MyHomePage>
           AudioService.currentMediaItemStream,
               (queue, mediaItem) => QueueState(queue, mediaItem));
 
-  Future<bool> _onWillPop() async {
-
-    if (!panelController.isPanelClosed()) {
-      panelController.close();
-      return Future<bool>.value(false);
-    } else if (_globalKey.currentState.isDrawerOpen) {
-      Navigator.pop(context); // closes the drawer if opened
-      return Future.value(false); // won't exit the app
-    } else {
-      // dispose();
-      //return Future.value(true);
-
-      var now = DateTime.now();
-      if (_currentBackPressTime == null ||
-          now.difference(_currentBackPressTime) > Duration(seconds: 2)) {
-        _currentBackPressTime = now;
-        _globalKey.currentState.showSnackBar(SnackBar(
-          content: Text(
-            'Double tap to exit app',
-            textAlign: TextAlign.center,
+  Future<bool> _backPressed() async {
+    return (await showDialog(
+      barrierColor: Colors.white,
+      context: context,
+      builder: (context) => new AlertDialog(
+        backgroundColor: Colors.white,
+        title: Text(
+          'Alert!',
+          style: TextStyle(
+              color: Colors.red
           ),
-          backgroundColor: CustomColor.primaryColor,
-          behavior: SnackBarBehavior.floating,
-          elevation: 1.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50.0),
+        ),
+        content: Text(
+          'Do you want to exit ${Strings.appName}?',
+          style: TextStyle(
+            color: Colors.black,
           ),
-        ));
-        return Future.value(false);
-      }
-      dispose();
-      return Future.value(true);
-    }
+        ),
+        actions: <Widget>[
+          // ignore: deprecated_member_use
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: new Text('No'),
+          ),
+          // ignore: deprecated_member_use
+          FlatButton(
+            onPressed: () {
+              AudioService.stop();
+              SystemNavigator.pop();
+            },
+            child: new Text('Yes'),
+          ),
+        ],
+      ),
+    )) ?? false;
   }
+
 
   TabBarView getTabBarView(List<Widget> tabs) {
     return TabBarView(
@@ -1070,16 +1095,6 @@ class _MyHomePageState extends State<MyHomePage>
                 width: MediaQuery.of(context).size.width,
                 height: 200,
               ),
-              /*ListTile(
-                  leading: Icon(Icons.home, color: Colors.white),
-                  title: Text(
-                    'Home',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    tabController.animateTo(0);
-                  }),*/
               SizedBox(height: 50,),
               ListTile(
                   leading: Icon(
@@ -1107,39 +1122,6 @@ class _MyHomePageState extends State<MyHomePage>
                     Navigator.pop(context);
                     UrlLauncher.url(Strings.twitterUrl);
                   }),
-              /*ListTile(
-                  leading: Icon(Icons.radio, color: Colors.white),
-                  title: Text(
-                    'All Radio',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    tabController.animateTo(2);
-                  }),*/
-              /*ListTile(
-                  leading: Icon(Icons.favorite, color: Colors.white),
-                  title: Text(
-                    'Favourite',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Directionality(
-                            textDirection: direction,
-                            // set this property
-                            child: Favorite(
-                              play: _play,
-                              pause: _pause,
-                              next: _next,
-                              previous: _previous,
-                            ),
-                          ),
-                        ));
-                  }),*/
               ListTile(
                   leading: Icon(Icons.share, color: Colors.white),
                   title: Text(
@@ -1183,6 +1165,19 @@ class _MyHomePageState extends State<MyHomePage>
                   ),
                   onTap: () {
                     AppReview.requestReview.then((onValue) {});
+                  }),
+              ListTile(
+                  leading: Icon(
+                      FontAwesomeIcons.chrome,
+                      color: Colors.white
+                  ),
+                  title: Text(
+                    'Website',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    UrlLauncher.url(Strings.webUrl);
                   }),
             ],
           )),

@@ -103,8 +103,6 @@ bool cityMode = false;
 int curPos = 0;
 List<ChannelDatum> curPlayList = List();
 
-List<MediaItem> myRadioList = [];
-
 int tapIndex = 0;
 ///current player state
 enum PlayerState { stopped, playing, paused }

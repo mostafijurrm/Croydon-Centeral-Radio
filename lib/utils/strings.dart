@@ -4,6 +4,7 @@ class Strings {
   static String allStation= 'Live Music Radio with Fantastic Genres';
   static String facebookUrl= 'https://www.facebook.com/Croydon-Central-Radio-109018284714654';
   static String twitterUrl= 'https://twitter.com/PowerUpFM1';
+  static String webUrl= 'http://croydoncentralradio.co.uk';
 
 
   //static channel details

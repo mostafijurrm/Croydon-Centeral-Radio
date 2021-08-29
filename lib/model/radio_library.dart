@@ -1,9 +1,9 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:croydoncentralradio/Helper/Constant.dart';
 import 'package:croydoncentralradio/utils/strings.dart';
 
 class RadioLibrary {
 
-  var jsonResponse;
 
   final _items = <MediaItem>[
     MediaItem(
