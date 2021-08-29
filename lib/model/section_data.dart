@@ -316,19 +316,27 @@ class Notification {
   Notification({
     this.title,
     this.description,
+    this.date,
+    this.time,
   });
 
   String title;
   String description;
+  String date;
+  String time;
 
   factory Notification.fromJson(Map<String, dynamic> json) => Notification(
     title: json["title"],
     description: json["description"],
+    date: json["date"],
+    time: json["time"],
   );
 
   Map<String, dynamic> toJson() => {
     "title": title,
     "description": description,
+    "date": date,
+    "time": time,
   };
 }
 

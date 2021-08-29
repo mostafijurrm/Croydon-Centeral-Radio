@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'dart:ui';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:audio_service/audio_service.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:croydoncentralradio/model/section_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:croydoncentralradio/utils/custom_color.dart';
@@ -102,11 +103,14 @@ bool cityMode = false;
 int curPos = 0;
 List<ChannelDatum> curPlayList = List();
 
+List<MediaItem> myRadioList = [];
+
+int tapIndex = 0;
 ///current player state
 enum PlayerState { stopped, playing, paused }
 
 ///music player state
-AudioPlayerState audioPlayerState;
+// AudioPlayerState audioPlayerState;
 
 ///music player instance
 AudioPlayer audioPlayer;
@@ -131,7 +135,7 @@ Duration position;
 bool isLocal = false;
 
 ///media player mode
-PlayerMode mode = PlayerMode.MEDIA_PLAYER;
+// PlayerMode mode = PlayerMode.MEDIA_PLAYER;
 
 ///remote url
 String url;

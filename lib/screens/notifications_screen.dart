@@ -60,7 +60,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 ),
                               ),
                               Text(
-                                '23 aug, 2021',
+                                notification[index].time,
                                 style: TextStyle(
                                     color: Colors.white.withOpacity(0.8),
                                     fontSize: 16,

@@ -254,7 +254,7 @@ class _Player_State extends State<Radio_Station> {
     setState(() {
 
     });
-    print('response: $data');
+    // print('response: $data');
     return SectionData.fromJson(data);
 
   }
