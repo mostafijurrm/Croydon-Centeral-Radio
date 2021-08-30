@@ -599,6 +599,7 @@ class _MyHomePageState extends State<MyHomePage>
     final response = await http.get(url);
     var data = jsonDecode(response.body);
     List list = data['data']['channel_data'];
+
     // print('response data: '+ data.toString());
     // for(int i = 0; i < list.length; i++ ) {
     //   setState(() {
@@ -613,6 +614,8 @@ class _MyHomePageState extends State<MyHomePage>
     //     // print('new length: '+myRadioList.length.toString());
     //   });
     // }
+
+
     setState(() {
 
 
@@ -627,7 +630,6 @@ class _MyHomePageState extends State<MyHomePage>
       Strings.channelName3 = list[2]['channel_name'];
       Strings.radioUrl3 = list[2]['radio_url'];
       Strings.channelLogo3 = list[2]['channel_logo'];
-
 
       Strings.channelName4 = list[3]['channel_name'];
       Strings.radioUrl4 = list[3]['radio_url'];
@@ -1192,9 +1194,7 @@ void _audioPlayerTaskEntrypoint() async {
 
 class AudioPlayerTask extends BackgroundAudioTask {
 
-
   final _mediaLibrary = RadioLibrary();
-
 
   AudioPlayer _player = new AudioPlayer();
   AudioProcessingState _skipState;
@@ -1203,7 +1203,6 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   List<MediaItem> get queue => _mediaLibrary.items;
   // List<MediaItem> get queue => myRadioList;
-
   int get index => _player.currentIndex;
   MediaItem get mediaItem => index == null ? null : queue[index];
 
@@ -1243,6 +1242,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
     // Load and broadcast the queue
     AudioServiceBackground.setQueue(queue);
     try {
+
       await _player.setAudioSource(ConcatenatingAudioSource(
         children:
         queue.map((item) => AudioSource.uri(Uri.parse(item.id))).toList(),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:croydoncentralradio/class/custom_loading.dart';
+import 'package:croydoncentralradio/class/url_launcher.dart';
 import 'package:croydoncentralradio/model/section_data.dart';
 import 'package:croydoncentralradio/urls/endpoints.dart';
 import 'package:croydoncentralradio/urls/urls.dart';
@@ -38,48 +39,58 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
-                  return Card(
-                    elevation: 2,
-                    color: CustomColor.primaryColor,
-                    child: Padding(
-                      padding: const EdgeInsets.all(
-                          20
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                notification[index].title,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold
+                  return GestureDetector(
+                    child: Card(
+                      elevation: 2,
+                      color: CustomColor.primaryColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(
+                            20
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  notification[index].title,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                notification[index].time,
-                                style: TextStyle(
-                                    color: Colors.white.withOpacity(0.8),
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold
+                                Text(
+                                  notification[index].time,
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.8),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10,),
-                          Text(
-                            notification[index].description,
-                            style: TextStyle(
-                                color: Colors.white.withOpacity(0.5),
-                                fontSize: 16,
+                              ],
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 10,),
+                            Text(
+                              notification[index].description,
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(0.5),
+                                  fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
+                    onTap: () {
+                      print(notification[index].url);
+                      if(notification[index].url != null) {
+                        UrlLauncher.url(notification[index].url);
+                      } else {
+                        print('there is no url');
+                      }
+                    },
                   );
                 },
               );
@@ -100,7 +111,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     setState(() {
 
     });
-    print('response: $data');
+    // print('response: $data');
     return SectionData.fromJson(data);
 
   }

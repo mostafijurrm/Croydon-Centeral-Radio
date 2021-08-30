@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:croydoncentralradio/Helper/Constant.dart';
+import 'package:croydoncentralradio/main.dart';
 import 'package:croydoncentralradio/utils/strings.dart';
 
 class RadioLibrary {
@@ -113,6 +114,24 @@ class RadioLibrary {
       artist: "CROYDON CENTRAL RADIO",
       duration: Duration(milliseconds: 0),
       artUri: Strings.channelLogo12,
+    ),
+    MediaItem(
+      // This can be any unique id, but we use the audio URL for convenience.
+      id: Strings.radioUrl13,
+      album: "CROYDON CENTRAL RADIO",
+      title: Strings.channelName13,
+      artist: "CROYDON CENTRAL RADIO",
+      duration: Duration(milliseconds: 0),
+      artUri: Strings.channelLogo13,
+    ),
+    MediaItem(
+      // This can be any unique id, but we use the audio URL for convenience.
+      id: Strings.radioUrl14,
+      album: "CROYDON CENTRAL RADIO",
+      title: Strings.channelName14,
+      artist: "CROYDON CENTRAL RADIO",
+      duration: Duration(milliseconds: 0),
+      artUri: Strings.channelLogo14,
     ),
   ];
 
